@@ -1,0 +1,176 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-sans: 'Figtree Variable', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-display: 'Bricolage Grotesque Variable', 'Segoe UI', system-ui, sans-serif;
+
+  /* Ink (text) */
+  --color-ink: #0c1b33;
+  --color-ink-2: #33405e;
+  --color-muted: #5b6b88;
+
+  /* Surfaces & lines */
+  --color-canvas: #ffffff;
+  --color-mist: #f5f9fd;
+  --color-sky: #eaf4fc;
+  --color-sky-2: #d9ecfa;
+  --color-line: #dce7f2;
+  --color-line-2: #c9daec;
+
+  /* Brand */
+  --color-tg: #2aabee;        /* Telegram blue — illustrations, large accents */
+  --color-tg-soft: #e3f3fc;
+  --color-brand: #1673c4;     /* action blue — buttons & links (AA with white text) */
+  --color-brand-600: #0f5a9c;
+  --color-navy: #0f2347;
+  --color-violet: #6e56f7;
+  --color-violet-soft: #efecff;
+  --color-cyan: #22c3ee;
+  --color-mint: #19b98d;
+
+  /* Status */
+  --color-success: #0f8a63;
+  --color-success-soft: #e3f6ef;
+  --color-warning: #a35b00;
+  --color-warning-soft: #fdf1df;
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.75rem;
+
+  --shadow-card: 0 1px 2px rgb(12 27 51 / 0.04), 0 8px 24px -12px rgb(22 115 196 / 0.18);
+  --shadow-float: 0 24px 60px -24px rgb(15 35 71 / 0.35);
+  --shadow-phone: 0 50px 100px -30px rgb(15 35 71 / 0.35), 0 0 0 1px rgb(15 35 71 / 0.06);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display text-ink;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection { background: var(--color-sky-2); }
+  :focus-visible {
+    outline: 3px solid var(--color-tg);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  [id] { scroll-margin-top: 96px; }
+}
+
+@layer utilities {
+  .bg-dots {
+    background-image: radial-gradient(rgb(22 115 196 / 0.14) 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(rgb(22 115 196 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(22 115 196 / 0.06) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 55%, transparent);
+  }
+}
+
+/* Aurora background: slow-moving brand-colour light behind hero and CTA sections */
+@keyframes aurora-a { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(6%, 8%) scale(1.15); } }
+@keyframes aurora-b { 0%,100% { transform: translate(0,0) scale(1.1); } 50% { transform: translate(-8%, -4%) scale(0.95); } }
+@keyframes aurora-c { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(4%, -8%) scale(1.2); } }
+.aurora > span { position: absolute; border-radius: 9999px; filter: blur(70px); opacity: 0.55; will-change: transform; }
+.aurora > span:nth-child(1) { animation: aurora-a 18s ease-in-out infinite; }
+.aurora > span:nth-child(2) { animation: aurora-b 22s ease-in-out infinite; }
+.aurora > span:nth-child(3) { animation: aurora-c 26s ease-in-out infinite; }
+
+@keyframes float-y { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.float-slow { animation: float-y 6s ease-in-out infinite; }
+.float-med { animation: float-y 4.5s ease-in-out infinite; }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-track { animation: marquee 40s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+@keyframes draw { from { stroke-dashoffset: var(--len, 600); } to { stroke-dashoffset: 0; } }
+.draw-path { stroke-dasharray: var(--len, 600); stroke-dashoffset: var(--len, 600); }
+.in-view .draw-path, .draw-now { animation: draw 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+@keyframes grow-bar { from { transform: scaleY(0.08); } to { transform: scaleY(1); } }
+.grow-bars > * { transform-origin: bottom; transform: scaleY(0.08); }
+.in-view .grow-bars > *, .grow-now > * { animation: grow-bar 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+@keyframes ping-soft { 0% { transform: scale(0.6); opacity: 0.7; } 100% { transform: scale(2.2); opacity: 0; } }
+.ping-soft { animation: ping-soft 2.4s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+@keyframes caret { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+.caret { animation: caret 1s steps(1) infinite; }
+
+@keyframes typing { from { width: 0; } to { width: var(--w, 100%); } }
+.in-view .type-line, .type-now { animation: typing 2.4s steps(40, end) forwards; }
+.type-line { width: 0; overflow: hidden; white-space: nowrap; }
+
+@keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.sweep { animation: sweep 5s linear infinite; transform-origin: 50% 50%; }
+
+@keyframes slide-in-left { from { transform: translateX(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.in-view .slide-stagger > * { animation: slide-in-left 0.6s ease-out both; }
+.in-view .slide-stagger > *:nth-child(2) { animation-delay: 0.15s; }
+.in-view .slide-stagger > *:nth-child(3) { animation-delay: 0.3s; }
+.in-view .slide-stagger > *:nth-child(4) { animation-delay: 0.45s; }
+.slide-stagger > * { opacity: 0; }
+
+/* Text gradient for one highlighted line in key headings */
+.text-gradient {
+  background: linear-gradient(100deg, #1673c4 0%, #2aabee 45%, #6e56f7 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+/* Spotlight border that follows the pointer (set --mx/--my from JS) */
+.spotlight { position: relative; isolation: isolate; }
+.spotlight::before {
+  content: ''; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; z-index: -1; opacity: 0; transition: opacity .25s;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), rgb(42 171 238 / 0.9), rgb(110 86 247 / 0.5) 40%, transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.spotlight:hover::before { opacity: 1; }
+
+/* Single orchestrated hero moment: the paper plane flies along its trail once. */
+@keyframes plane-fly {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 1; }
+}
+@keyframes bubble-in {
+  0% { opacity: 0; transform: translateY(14px) scale(0.98); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes dash-draw {
+  from { stroke-dashoffset: 400; }
+  to { stroke-dashoffset: 0; }
+}
+.anim-plane {
+  offset-rotate: auto;
+  animation: plane-fly 2.2s cubic-bezier(0.45, 0, 0.2, 1) 0.3s both;
+}
+.anim-bubble { animation: bubble-in 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 2.3s both; }
+.anim-fade { animation: bubble-in 0.6s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .anim-plane, .anim-bubble, .anim-fade, .aurora > span, .float-slow, .float-med, .marquee-track, .ping-soft, .sweep, .caret { animation: none !important; offset-distance: 100%; }
+  .draw-path { stroke-dashoffset: 0 !important; animation: none !important; }
+  .grow-bars > *, .slide-stagger > * { transform: none !important; opacity: 1 !important; animation: none !important; }
+  .type-line { width: var(--w, 100%) !important; animation: none !important; }
+}
